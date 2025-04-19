@@ -1,0 +1,4 @@
+pytrends
+pandas
+tqdm
+streamlit
