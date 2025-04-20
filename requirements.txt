@@ -2,3 +2,4 @@ pytrends
 pandas
 tqdm
 streamlit
+streamlit-tags
