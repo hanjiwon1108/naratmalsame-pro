@@ -1,16 +1,17 @@
-import streamlit as st
 import pandas as pd
 import altair as alt
+import streamlit as st
 
-st.title("Hello Streamlit-er 👋")
+
+st.title("🇰🇷 순화 사례 검색")
 data = pd.read_csv("searched.csv", encoding='utf-8', header=0)
 
 
 with st.form("search_form"):
-  cols = st.columns([5, 1, 1])
-  name = cols[0].text_input("검색", "")
-  pro = cols[1].toggle("Pro")
-  submitted = cols[2].form_submit_button("Submit")
+  cols = st.columns([5, 1, 1], vertical_alignment="bottom")
+  name = cols[0].text_input("검색", placeholder="검색어를 입력하세요")
+  # pro = cols[1].toggle("Pro")
+  submitted = cols[2].form_submit_button("검색")
 
   if submitted:
 
@@ -22,8 +23,8 @@ with st.form("search_form"):
     ]
     cols1 = st.columns([1, 1, 1])
     cols1[0].write(f"검색어: {name}")
-    cols1[1].write(f"Total results: {len(filtered_data)}")
-    cols1[2].write(f"Pro: {pro}")
+    cols1[1].write(f"검색 결과: {len(filtered_data)}")
+    # cols1[2].write(f"Pro: {pro}")
 
     display_data = filtered_data.copy()
     display_data['다듬은 말 검색량 비율'] = display_data.apply(
@@ -59,15 +60,15 @@ with st.form("search_form"):
       },
       height=700,
     )
-    selected_idx.selection
+    # selected_idx.selection
 
     # Prepare data for chart
     chart_data = filtered_data[['원어_검색량', '다듬은말_검색량']].copy()
     chart_data['index'] = filtered_data.index
     # selected_idx.selection.rows 내부 index 목록 데이터만 필터
-    selected_rows = selected_idx.selection.rows
-
-    chart_data = chart_data[chart_data['index'].isin(selected_rows)]
+    if selected_idx.selection.rows:
+      selected_rows = selected_idx.selection.rows
+      chart_data = chart_data[chart_data['index'].isin(selected_rows)]
 
     # Melt data for Altair
     chart_data = chart_data.melt(
@@ -76,8 +77,8 @@ with st.form("search_form"):
     selection = alt.selection_interval(bind='scales')
 
     chart = alt.Chart(chart_data).mark_bar().encode(
-      x='검색량:Q',
-      y='다듬을 말:O',
+      y='검색량:Q',
+      x='다듬을 말:O',
       color='검색량종류:N',
       tooltip=[
           alt.Tooltip('검색량종류:N', title='종류'),
