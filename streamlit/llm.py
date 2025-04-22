@@ -2,14 +2,10 @@ import streamlit as st
 import requests
 import time
 import json
-import toml
 import os  
 
-config_path = os.path.join(os.path.dirname(__file__), "../config.toml")
-config = toml.load(config_path)
-
-API_ENDPOINT = config["API_ENDPOINT"]
-API_KEY = config["API_KEY"]
+API_ENDPOINT = st.secrets["API_ENDPOINT"]
+API_KEY = st.secrets["API_KEY"]
 
 
 st.write("Streamlit loves LLMs! 🤖 [Build your own chat app](https://docs.streamlit.io/develop/tutorials/llms/build-conversational-apps) in minutes, then make it powerful by adding images, dataframes, or even input widgets to the chat.")
